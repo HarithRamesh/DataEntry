@@ -7,8 +7,6 @@ const app = express();
 const PORT = process.env.PORT || 7000;
 const TABLE = "Players";
 
-
-
 app.use(cors());
 app.use(bodyParser.json());
 dBService.createTable(TABLE);
