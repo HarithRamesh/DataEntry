@@ -1,0 +1,23 @@
+
+label {
+  display: flex;
+  flex-direction: row;
+    justify-content: flex-end;
+    align-items: left;
+    width: 400px;
+    line-height: 26px;
+    margin-bottom: 10px;
+}
+
+input {
+  display: flex;
+  height: 20px;
+  flex: 0 0 250px;
+  align-items: left;
+  margin-left: 10px;
+  height: 30px;
+}
+
+h2 {
+  margin-left: 150px;
+}
