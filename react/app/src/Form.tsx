@@ -19,7 +19,7 @@ function Form() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const playerData = {
-      playerId: md5(name.current?.value.toLowerCase() as any),
+      playerid: md5(name.current?.value.toLowerCase() as any),
       name: name.current?.value,
       age: age.current?.value,
       match: match.current?.value,

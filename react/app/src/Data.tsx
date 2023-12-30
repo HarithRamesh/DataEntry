@@ -5,6 +5,7 @@ import "./Data.css";
 import axios, { AxiosResponse } from "axios";
 
 export interface playerData {
+  playerid: string,
   name: string;
   age: number;
   match: number;
@@ -19,13 +20,13 @@ export interface playerData {
 function Data() {
 
   const [records, setRecords] = useState<playerData[]>([]);
-   const [showPopup, setShowPopup] = useState(false);
+   const [showPopup, setShowPopup] = useState<boolean | null>(null);
    const handleOpenPopup = () => setShowPopup(true);
    const handleClosePopup = () => setShowPopup(false);
 
   useEffect(() => {
-    getRecords().then((res) => setRecords(res.data)).catch();
-  }, []);
+    getRecords().then((res) => setRecords(res.data.data)).catch();
+  }, [showPopup]);
 
   const getRecords:() => Promise<AxiosResponse> = async() => {
     return await axios.get("http://localhost:7000/players");
@@ -35,19 +36,11 @@ function Data() {
     <div className="table-responsive">
       <div>
         <h1> Player table </h1>
-        <button
-          id="button"
-          type="button"
-          className="btn btn-primary"
-          onClick={handleOpenPopup}
-        >
-          Create new entry
-        </button>
       </div>
       <table className="table">
         <thead className="table-dark">
           <tr>
-            <th scope="col">#</th>
+            <th scope="col">PlayerId</th>
             <th scope="col">Name</th>
             <th scope="col">Age</th>
             <th scope="col">Match</th>
@@ -59,42 +52,34 @@ function Data() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <th scope="row">1</th>
-
-              <td> </td>
-          </tr>
-          <tr>
-            <th scope="row">2</th>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">3</th>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">4</th>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">5</th>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">6</th>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">7</th>
-            <td></td>
-          </tr>
-          <tr>
-            <th scope="row">8</th>
-            <td></td>
-          </tr>
+          {records.map((record, index) => (
+            <tr key={index}>
+              <td> {record.playerid} </td>
+              <td> {record.name} </td>
+              <td> {record.age} </td>
+              <td> {record.match} </td>
+              <td> {record.highestscore} </td>
+              <td> {record.battingaverage} </td>
+              <td> {record.bowlingaverage} </td>
+              <td> {record.wickets} </td>
+              <td> {record.bowlingeconomy} </td>
+            </tr>
+          ))}
         </tbody>
       </table>
-      <PopupForm show={showPopup} closePopup={handleClosePopup} />
+      <button
+        id="button"
+        type="button"
+        className="btn btn-primary"
+        onClick={handleOpenPopup}
+      >
+        Create new entry
+      </button>
+      {showPopup != null ? (
+        <PopupForm show={showPopup} closePopup={handleClosePopup} />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

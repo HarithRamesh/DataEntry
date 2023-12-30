@@ -38,7 +38,7 @@ app.post("/insert/player", (req, res) => {
         query = query.concat(` ${columns[i]} = ${values[i]},`);
       }
     }
-    dBConnection.query(query, (err,result) => {
+    dBConnection.query(query, (err) => {
       if (err != null) {
         console.error(`Error inserting to a table ${err}`);
         res.status(400).send({
