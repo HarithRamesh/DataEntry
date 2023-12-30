@@ -76,6 +76,26 @@ app.get("/players", (req,res) => {
   });
 })
 
+app.delete("/delete/player", (req, res) => {
+  const payload: playerData = req.body as playerData;
+  const query = `DELETE FROM ${TABLE} where playerid='${payload.playerid}'`;
+  dBConnection.query(query, (error) => {
+    if (error) {
+      console.error(`Unable to delete the record reason ${error}`);
+      res.status(400).send({
+        success: false,
+        message: "Unable to delete the record",
+      });
+    } else {
+      console.log("Record deleted successfully");
+      res.status(200).send({
+        success: true,
+        message: "Record deleted successfully",
+      });
+    }
+  });
+});
+
 function validatePayload(data: playerData) {
   return (
     typeof data === "object" &&

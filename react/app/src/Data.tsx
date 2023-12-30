@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import PopupForm from "./PopupForm";
 import "./Data.css";
 import axios, { AxiosResponse } from "axios";
+import { toast } from "react-toastify";
 
 export interface playerData {
   playerid: string,
@@ -18,18 +19,50 @@ export interface playerData {
 
 
 function Data() {
-
+  const [isRecordDeleted, setIsRecordDeleted] = useState(false);
   const [records, setRecords] = useState<playerData[]>([]);
    const [showPopup, setShowPopup] = useState<boolean | null>(null);
    const handleOpenPopup = () => setShowPopup(true);
    const handleClosePopup = () => setShowPopup(false);
 
   useEffect(() => {
-    getRecords().then((res) => setRecords(res.data.data)).catch();
+    getRecords()
+      .then((res) => setRecords(res.data.data))
+      .catch();
   }, [showPopup]);
-
+ 
   const getRecords:() => Promise<AxiosResponse> = async() => {
     return await axios.get("http://localhost:7000/players");
+  }
+
+  const deleteRecord: (data: playerData) => Promise<void> = async (data: playerData) => {
+    const deletePayload = {
+      method: "DELETE",
+      data
+    }
+    const response = await axios.delete("http://localhost:7000/delete/player", deletePayload); 
+    if (response.status === 200) {
+      toast.success("saved successfully", {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+      });
+      // Improvement requirement 
+      window.location.reload();
+    }
+    else {
+      toast.error("Failed to save the data", {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: false,
+      });
+    }
   }
   
   return (
@@ -49,6 +82,8 @@ function Data() {
             <th scope="col">Bowling Average</th>
             <th scope="col">Wickets</th>
             <th scope="col">Bowling Economy</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
@@ -63,6 +98,8 @@ function Data() {
               <td> {record.bowlingaverage} </td>
               <td> {record.wickets} </td>
               <td> {record.bowlingeconomy} </td>
+              <button className="btn btn-warning"> Update </button>
+              <button className="btn btn-danger" onClick={() => deleteRecord(record)}> Delete </button>
             </tr>
           ))}
         </tbody>
@@ -75,6 +112,7 @@ function Data() {
       >
         Create new entry
       </button>
+      {/* Auto render when new record is created */}
       {showPopup != null ? (
         <PopupForm show={showPopup} closePopup={handleClosePopup} />
       ) : (
