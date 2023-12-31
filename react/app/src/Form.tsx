@@ -2,11 +2,16 @@ import React, { useRef } from "react";
 import axios from "axios";
 import md5 from "md5";
 import "react-toastify/dist/ReactToastify.css";
-import { toast } from "react-toastify";
+import { Message } from "./Message";
 import "./Form.css";
 import { render } from "@testing-library/react";
+import {playerData} from "../interfaces/PlayerInterface"
 
-function Form() {
+interface formProps {
+  values : playerData
+}
+
+const Form: React.FC<formProps> = ({ values }) => {
   let name = useRef<HTMLInputElement>(null);
   let age = useRef<HTMLInputElement>(null);
   let match = useRef<HTMLInputElement>(null);
@@ -15,7 +20,7 @@ function Form() {
   let bowlavg = useRef<HTMLInputElement>(null);
   let wickets = useRef<HTMLInputElement>(null);
   let bowleco = useRef<HTMLInputElement>(null);
-  
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const playerData = {
@@ -41,34 +46,13 @@ function Form() {
       .post("http://localhost:7000/insert/player", postData)
       .then((res) => {
         if (res.status === 200) {
-          toast.success("saved successfully", {
-            position: "bottom-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-          });
+          Message.success(" New player created successfully");
         } else {
-          toast.error("Failed to save the data", {
-            position: "bottom-center",
-            autoClose: 2000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: false,
-          });
+          Message.failure("Failed to create new player");
         }
       })
       .catch((err) => {
-        toast.error("Failed to save the data", {
-          position: "bottom-center",
-          autoClose: 2000,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: false,
-        });
+        Message.failure("Something went wrong while creating a new player");
         console.log(err);
       });
   };
@@ -80,35 +64,83 @@ function Form() {
       <form onSubmit={handleSubmit} onReset={handleReset}>
         <label>
           Player Name:
-          <input type="text" placeholder="name" ref={name} required />
+          <input
+            type="text"
+            placeholder="name"
+            value={values?.name}
+            ref={name}
+            required
+          />
         </label>
         <label>
           Age:
-          <input type="text" placeholder="age" ref={age} required />
+          <input
+            type="text"
+            placeholder="age"
+            defaultValue={values?.age}
+            ref={age}
+            required
+          />
         </label>
         <label>
           Match:
-          <input type="text" placeholder="match" ref={match} required />
+          <input
+            type="text"
+            placeholder="match"
+            defaultValue={values?.match}
+            ref={match}
+            required
+          />
         </label>
         <label>
           Highest Score:
-          <input type="text" placeholder="score" ref={highscore} required />
+          <input
+            type="text"
+            placeholder="score"
+            defaultValue={values?.highestscore}
+            ref={highscore}
+            required
+          />
         </label>
         <label>
           Batting Average:
-          <input type="text" placeholder="bat avg" ref={batavg} required />
+          <input
+            type="text"
+            placeholder="bat avg"
+            defaultValue={values?.battingaverage}
+            ref={batavg}
+            required
+          />
         </label>
         <label>
           Bowling Average:
-          <input type="text" placeholder="bowl avg" ref={bowlavg} required />
+          <input
+            type="text"
+            placeholder="bowl avg"
+            defaultValue={values?.bowlingaverage}
+            ref={bowlavg}
+            required
+          />
         </label>
         <label>
           Wickets:
-          <input type="text" placeholder="wickets" ref={wickets} required />
+          <input
+            type="text"
+            placeholder="wickets"
+            defaultValue={values?.wickets}
+            ref={wickets}
+            required
+          />
         </label>
         <label>
           Bowling economy:
-          <input type="text" placeholder="economy" ref={bowleco} required />
+          <input
+            type="text"
+            placeholder="economy"
+            defaultValue={values?.bowlingeconomy}
+            ref={bowleco}
+            required
+          />
         </label>
         <button type="submit" className="btn btn-primary m-3">
           Submit
@@ -119,6 +151,6 @@ function Form() {
       </form>
     </div>
   );
-}
+};
 
 export default Form;

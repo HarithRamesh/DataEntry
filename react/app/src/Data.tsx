@@ -3,32 +3,35 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import PopupForm from "./PopupForm";
 import "./Data.css";
 import axios, { AxiosResponse } from "axios";
-import { toast } from "react-toastify";
-
-export interface playerData {
-  playerid: string,
-  name: string;
-  age: number;
-  match: number;
-  highestscore: number;
-  battingaverage: number;
-  bowlingaverage: number;
-  wickets: number;
-  bowlingeconomy: number;
-}
-
+import { Message } from "./Message";
+import {playerData} from "../interfaces/PlayerInterface"
 
 function Data() {
+  const [isRecordDeleted, setIsRecordDeleted] = useState(false);
+  const [recordToPrepopulateForm,setRecordToPrepopulateForm] = useState<playerData>({} as playerData); 
+  const [formTitle,setFormTitle] = useState<string>(""); 
   const [records, setRecords] = useState<playerData[]>([]);
-   const [showPopup, setShowPopup] = useState<boolean | null>(null);
-   const handleOpenPopup = () => setShowPopup(true);
-   const handleClosePopup = () => setShowPopup(false);
+  const [showPopup, setShowPopup] = useState<boolean | null>(null);
+  const handleOpenPopup = () => {
+    setShowPopup(true);
+    setFormTitle("Create Player");
+    setRecordToPrepopulateForm({} as playerData);
+  }
+  const handleClosePopup = () => setShowPopup(false);
+
+  const prepopulateValue = (value: playerData) => {
+    handleOpenPopup();
+    setRecordToPrepopulateForm(value);
+      setFormTitle("Update Player");
+  };
 
   useEffect(() => {
     getRecords()
       .then((res) => setRecords(res.data.data))
-      .catch();
-  }, [showPopup]);
+      .catch((error) =>
+        console.error(`Failed to query the records reason ${error}`)
+      );
+  }, [showPopup, formTitle, recordToPrepopulateForm, isRecordDeleted]);
  
   const getRecords:() => Promise<AxiosResponse> = async() => {
     return await axios.get("http://localhost:7000/players");
@@ -37,29 +40,13 @@ function Data() {
   const deleteRecord: (playerId: string) => Promise<void> = async (playerId: string) => {
     const response = await axios.delete(
       `http://localhost:7000/players/${playerId}`
-    ); 
+    );
     if (response.status === 200) {
-      toast.success("saved successfully", {
-        position: "bottom-center",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-      });
-      // Improvement required 
-      window.location.reload();
+      Message.success("Record deleted successfully");
+    } else {
+      Message.failure("Failed to delete the record");
     }
-    else {
-      toast.error("Failed to save the data", {
-        position: "bottom-center",
-        autoClose: 2000,
-        hideProgressBar: true,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: false,
-      });
-    }
+    setIsRecordDeleted(true);
   }
   
   return (
@@ -95,8 +82,18 @@ function Data() {
               <td> {record.bowlingaverage} </td>
               <td> {record.wickets} </td>
               <td> {record.bowlingeconomy} </td>
-              <button className="btn btn-warning"> Update </button>
-              <button className="btn btn-danger" onClick={() => deleteRecord(record.playerid)}> Delete </button>
+              <button
+                className="btn btn-warning"
+                onClick={() => prepopulateValue(record)}
+              >
+                Update
+              </button>
+              <button
+                className="btn btn-danger"
+                onClick={() => deleteRecord(record.playerid)}
+              >
+                Delete
+              </button>
             </tr>
           ))}
         </tbody>
@@ -111,7 +108,12 @@ function Data() {
       </button>
       {/* Auto render when new record is created */}
       {showPopup != null ? (
-        <PopupForm show={showPopup} closePopup={handleClosePopup} />
+        <PopupForm
+          show={showPopup}
+          closePopup={handleClosePopup}
+          data={recordToPrepopulateForm}
+          title={formTitle}
+        />
       ) : (
         <></>
       )}
