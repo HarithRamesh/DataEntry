@@ -19,7 +19,6 @@ export interface playerData {
 
 
 function Data() {
-  const [isRecordDeleted, setIsRecordDeleted] = useState(false);
   const [records, setRecords] = useState<playerData[]>([]);
    const [showPopup, setShowPopup] = useState<boolean | null>(null);
    const handleOpenPopup = () => setShowPopup(true);
@@ -35,12 +34,10 @@ function Data() {
     return await axios.get("http://localhost:7000/players");
   }
 
-  const deleteRecord: (data: playerData) => Promise<void> = async (data: playerData) => {
-    const deletePayload = {
-      method: "DELETE",
-      data
-    }
-    const response = await axios.delete("http://localhost:7000/delete/player", deletePayload); 
+  const deleteRecord: (playerId: string) => Promise<void> = async (playerId: string) => {
+    const response = await axios.delete(
+      `http://localhost:7000/players/${playerId}`
+    ); 
     if (response.status === 200) {
       toast.success("saved successfully", {
         position: "bottom-center",
@@ -50,7 +47,7 @@ function Data() {
         pauseOnHover: true,
         draggable: false,
       });
-      // Improvement requirement 
+      // Improvement required 
       window.location.reload();
     }
     else {
@@ -99,7 +96,7 @@ function Data() {
               <td> {record.wickets} </td>
               <td> {record.bowlingeconomy} </td>
               <button className="btn btn-warning"> Update </button>
-              <button className="btn btn-danger" onClick={() => deleteRecord(record)}> Delete </button>
+              <button className="btn btn-danger" onClick={() => deleteRecord(record.playerid)}> Delete </button>
             </tr>
           ))}
         </tbody>

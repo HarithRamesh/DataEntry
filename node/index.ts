@@ -76,9 +76,9 @@ app.get("/players", (req,res) => {
   });
 })
 
-app.delete("/delete/player", (req, res) => {
-  const payload: playerData = req.body as playerData;
-  const query = `DELETE FROM ${TABLE} where playerid='${payload.playerid}'`;
+app.delete("/players/:id", (req, res) => {
+  const playerId = req.params.id;
+  const query = `DELETE FROM ${TABLE} where playerid='${playerId}'`;
   dBConnection.query(query, (error) => {
     if (error) {
       console.error(`Unable to delete the record reason ${error}`);
