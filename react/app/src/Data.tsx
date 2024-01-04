@@ -22,7 +22,7 @@ function Data() {
   const prepopulateValue = (value: playerData) => {
     handleOpenPopup();
     setRecordToPrepopulateForm(value);
-      setFormTitle("Update Player");
+    setFormTitle("Update Player");
   };
 
   useEffect(() => {
@@ -32,12 +32,14 @@ function Data() {
         console.error(`Failed to query the records reason ${error}`)
       );
   }, [showPopup, formTitle, recordToPrepopulateForm, isRecordDeleted]);
- 
-  const getRecords:() => Promise<AxiosResponse> = async() => {
-    return await axios.get("http://localhost:7000/players");
-  }
 
-  const deleteRecord: (playerId: string) => Promise<void> = async (playerId: string) => {
+  const getRecords: () => Promise<AxiosResponse> = async () => {
+    return await axios.get("http://localhost:7000/players");
+  };
+
+  const deleteRecord: (playerId: string) => Promise<void> = async (
+    playerId: string
+  ) => {
     const response = await axios.delete(
       `http://localhost:7000/players/${playerId}`
     );
@@ -46,9 +48,9 @@ function Data() {
     } else {
       Message.failure("Failed to delete the record");
     }
-    setIsRecordDeleted(true);
-  }
-  
+    setIsRecordDeleted(!isRecordDeleted);
+  };
+
   return (
     <div className="table-responsive">
       <div>
@@ -57,7 +59,7 @@ function Data() {
       <table className="table">
         <thead className="table-dark">
           <tr>
-            <th scope="col">PlayerId</th>
+            <th scope="col">#</th>
             <th scope="col">Name</th>
             <th scope="col">Age</th>
             <th scope="col">Match</th>
@@ -73,7 +75,7 @@ function Data() {
         <tbody>
           {records.map((record, index) => (
             <tr key={index}>
-              <td> {record.playerid} </td>
+              <td> {index + 1} </td>
               <td> {record.name} </td>
               <td> {record.age} </td>
               <td> {record.match} </td>
