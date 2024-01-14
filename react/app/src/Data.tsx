@@ -61,6 +61,7 @@ function Data() {
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
+            <th scope="col">Type</th>
             <th scope="col">Age</th>
             <th scope="col">Match</th>
             <th scope="col">Highest Score</th>
@@ -77,6 +78,7 @@ function Data() {
             <tr key={index}>
               <td> {index + 1} </td>
               <td> {record.name} </td>
+              <td> {record.playertype} </td>
               <td> {record.age} </td>
               <td> {record.match} </td>
               <td> {record.highestscore} </td>

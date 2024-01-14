@@ -17,6 +17,14 @@ input {
   margin-left: 10px;
   height: 30px;
 }
+.drop-down {
+  display: flex;
+  height: 20px;
+  flex: 0 0 250px;
+  align-items: left;
+  margin-left: 10px;
+  height: 30px;
+}
 
 h2 {
   margin-left: 150px;

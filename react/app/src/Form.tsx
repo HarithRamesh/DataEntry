@@ -1,14 +1,14 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import axios from "axios";
 import md5 from "md5";
 import "react-toastify/dist/ReactToastify.css";
 import { Message } from "./Message";
 import "./Form.css";
 import { render } from "@testing-library/react";
-import {playerData} from "../interfaces/PlayerInterface"
+import { playerData } from "../interfaces/PlayerInterface";
 
 interface formProps {
-  values : playerData
+  values: playerData;
 }
 
 const Form: React.FC<formProps> = ({ values }) => {
@@ -20,12 +20,14 @@ const Form: React.FC<formProps> = ({ values }) => {
   let bowlavg = useRef<HTMLInputElement>(null);
   let wickets = useRef<HTMLInputElement>(null);
   let bowleco = useRef<HTMLInputElement>(null);
+  const [type, setType] = useState("Batsman");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const playerData = {
       playerid: md5(name.current?.value.toLowerCase() as any),
       name: name.current?.value,
+      PlayerType: type,
       age: age.current?.value,
       match: match.current?.value,
       highestscore: highscore.current?.value,
@@ -71,6 +73,19 @@ const Form: React.FC<formProps> = ({ values }) => {
             ref={name}
             required
           />
+        </label>
+        <label>
+          Player Type:
+          <select
+            className="drop-down"
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+          >
+            <option>Batsman</option>
+            <option>Bowler</option>
+            <option>All-Rounder</option>
+            <option>Wicket-keeper-Batsman</option>
+          </select>
         </label>
         <label>
           Age:

@@ -1,6 +1,7 @@
 export interface playerData {
   playerid: string;
   name: string;
+  playertype: string;
   age: number;
   match: number;
   highestscore: number;
