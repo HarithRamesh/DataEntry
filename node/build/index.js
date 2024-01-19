@@ -40,7 +40,7 @@ app.post("/insert/player", (req, res) => {
                 query = query.concat(` ${columns[i]} = ${values[i]},`);
             }
         }
-        dbService_1.dBConnection.query(query, (err, result) => {
+        dbService_1.dBConnection.query(query, (err) => {
             if (err != null) {
                 console.error(`Error inserting to a table ${err}`);
                 res.status(400).send({
@@ -73,6 +73,26 @@ app.get("/players", (req, res) => {
                 success: true,
                 message: "Queried successfully",
                 data: result.rows
+            });
+        }
+    });
+});
+app.delete("/players/:id", (req, res) => {
+    const playerId = req.params.id;
+    const query = `DELETE FROM ${TABLE} where playerid='${playerId}'`;
+    dbService_1.dBConnection.query(query, (error) => {
+        if (error) {
+            console.error(`Unable to delete the record reason ${error}`);
+            res.status(400).send({
+                success: false,
+                message: "Unable to delete the record",
+            });
+        }
+        else {
+            console.log("Record deleted successfully");
+            res.status(200).send({
+                success: true,
+                message: "Record deleted successfully",
             });
         }
     });
