@@ -34,15 +34,13 @@ function Data() {
   }, [showPopup, formTitle, recordToPrepopulateForm, isRecordDeleted]);
 
   const getRecords: () => Promise<AxiosResponse> = async () => {
-    return await axios.get("http://localhost:7000/players");
+    return await axios.get("/players");
   };
 
   const deleteRecord: (playerId: string) => Promise<void> = async (
     playerId: string
   ) => {
-    const response = await axios.delete(
-      `http://localhost:7000/players/${playerId}`
-    );
+    const response = await axios.delete(`/players/${playerId}`);
     if (response.status === 200) {
       Message.success("Record deleted successfully");
     } else {
