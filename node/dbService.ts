@@ -24,10 +24,10 @@ export namespace dBService {
       Age int,
       Match int,
       HighestScore int,
-      BattingAverage int,
-      BowlingAverage int,
+      BattingAverage float,
+      BowlingAverage float,
       Wickets int,
-      BowlingEconomy int,
+      BowlingEconomy float,
       PRIMARY KEY(PlayerId)
       )`;
     dBConnection.query(insertQuery, (err, res) => {
