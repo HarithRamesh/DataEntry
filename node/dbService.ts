@@ -5,7 +5,7 @@ export const dBConnection = new Client({
   user: "postgres",
   database: "postgres",
   password: "abcd1234",
-  port: 5432,
+  port: 5433,
 });
 
 dBConnection.connect((err) => {

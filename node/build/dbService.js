@@ -8,7 +8,7 @@ exports.dBConnection = new pg_1.Client({
     user: "postgres",
     database: "postgres",
     password: "abcd1234",
-    port: 5432,
+    port: 5433,
 });
 exports.dBConnection.connect((err) => {
     if (err) {
@@ -28,10 +28,10 @@ var dBService;
       Age int,
       Match int,
       HighestScore int,
-      BattingAverage int,
-      BowlingAverage int,
+      BattingAverage float,
+      BowlingAverage float,
       Wickets int,
-      BowlingEconomy int,
+      BowlingEconomy float,
       PRIMARY KEY(PlayerId)
       )`;
         exports.dBConnection.query(insertQuery, (err, res) => {

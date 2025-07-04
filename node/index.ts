@@ -4,7 +4,7 @@ import cors from "cors";
 import { dBConnection, dBService } from "./dbService";
 import { playerData } from "./interfaces";
 const app = express();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 5001;
 const TABLE = "Players";
 
 app.use(cors());

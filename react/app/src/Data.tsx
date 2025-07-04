@@ -51,9 +51,9 @@ function Data() {
 
   return (
     <div className="table-responsive">
-      <div>
+      {/* <div>
         <h1> Player table </h1>
-      </div>
+      </div> */}
       <table className="table">
         <thead className="table-dark">
           <tr>

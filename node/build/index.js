@@ -8,7 +8,7 @@ const body_parser_1 = __importDefault(require("body-parser"));
 const cors_1 = __importDefault(require("cors"));
 const dbService_1 = require("./dbService");
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 7000;
+const PORT = process.env.PORT || 5001;
 const TABLE = "Players";
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());

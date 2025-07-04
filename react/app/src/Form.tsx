@@ -45,7 +45,7 @@ const Form: React.FC<formProps> = ({ values }) => {
     };
 
     axios
-      .post("http://localhost:7000/insert/player", postData)
+      .post("/insert/player", postData)
       .then((res) => {
         if (res.status === 200) {
           Message.success(" New player created successfully");
