@@ -1,12 +1,14 @@
 import express from "express";
 import bodyParser from "body-parser";
 import cors from "cors";
+import dotenv from "dotenv";
 import { dBConnection, dBService } from "./dbService";
 import { playerData } from "./interfaces";
 const app = express();
 const PORT = process.env.PORT || 5001;
 const TABLE = "Players";
 
+dotenv.config({path: "./.env"});
 app.use(cors());
 app.use(bodyParser.json());
 dBService.createTable(TABLE);
